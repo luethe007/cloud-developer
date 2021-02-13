@@ -7,13 +7,13 @@ import { Car, cars as cars_list } from './cars';
   let cars:Car[]  = cars_list;
 
   //Create an express applicaiton
-  const app = express(); 
+  const app = express();
   //default port to listen
-  const port = 8082; 
+  const port = 8082;
   
   //use middleware so post bodies 
   //are accessable as req.body.{{variable}}
-  app.use(bodyParser.json()); 
+  app.use(bodyParser.json());
 
   // Root URI call
   app.get( "/", ( req: Request, res: Response ) => {
@@ -70,6 +70,22 @@ import { Car, cars as cars_list } from './cars';
 
   // @TODO Add an endpoint to GET a list of cars
   // it should be filterable by make with a query paramater
+  
+  app.get( "/cars/", ( req: Request, res: Response ) => {
+    // destruct our query paramaters
+    let { make } = req.query;
+
+    
+    let cars_list = cars;
+
+    // if we have an optional query paramater, filter by it
+    if (make) {
+      cars_list = cars.filter((car) => car.make === make);
+    }
+
+    // return the resulting list along with 200 success
+    res.status(200).send(cars_list);
+  } );
 
   // @TODO Add an endpoint to get a specific car
   // it should require id
